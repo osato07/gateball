@@ -3,7 +3,7 @@ const scene = new THREE.Scene();
 
 // カメラの作成
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 60, 60);
+camera.position.set(0, 60, 60); // カメラ位置を高めに設定
 camera.rotation.x = -Math.PI / 4;
 
 // レンダラーの作成
@@ -14,19 +14,23 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 // 環境光と方向光の追加
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); // 全体に柔らかい光を追加
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.set(100, 100, 50);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // 強い白い光を追加
+directionalLight.position.set(150, 150, 100); // 光源の位置を高く設定
 directionalLight.castShadow = true;
 scene.add(directionalLight);
 
-// 影の設定
-directionalLight.shadow.mapSize.width = 1024;
-directionalLight.shadow.mapSize.height = 1024;
+// 影カメラの設定（影の範囲を調整）
+directionalLight.shadow.mapSize.width = 2048; // 解像度を上げる
+directionalLight.shadow.mapSize.height = 2048;
 directionalLight.shadow.camera.near = 0.5;
 directionalLight.shadow.camera.far = 500;
+directionalLight.shadow.camera.left = -150;
+directionalLight.shadow.camera.right = 150;
+directionalLight.shadow.camera.top = 100;
+directionalLight.shadow.camera.bottom = -100;
 
 // テクスチャの読み込み
 const textureLoader = new THREE.TextureLoader();
@@ -42,7 +46,6 @@ const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
 field.rotation.x = -Math.PI / 2;
 field.receiveShadow = true; // 影を受け取る設定
 scene.add(field);
-
 
 // ゴルフボールの作成
 const ballGeometry = new THREE.SphereGeometry(2, 32, 32);
@@ -90,6 +93,21 @@ document.addEventListener('keydown', (event) => {
 function applyFriction() {
   velocity.x *= 0.98;
   velocity.z *= 0.98;
+}
+
+// ボールがフィールドの外に出たらリセットする関数
+function checkOutOfBounds() {
+  const fieldMinX = -125;
+  const fieldMaxX = 125;
+  const fieldMinZ = -40;
+  const fieldMaxZ = 40;
+
+  if (
+    golfBall.position.x < fieldMinX || golfBall.position.x > fieldMaxX ||
+    golfBall.position.z < fieldMinZ || golfBall.position.z > fieldMaxZ
+  ) {
+    resetBallPosition(); // ボールの位置をリセット
+  }
 }
 
 // 衝突判定
@@ -142,7 +160,9 @@ function animate() {
   golfBall.position.z += velocity.z;
 
   applyFriction();
+  checkOutOfBounds(); // フィールド外チェック
   checkGoal();
+
   renderer.render(scene, camera);
 }
 animate();

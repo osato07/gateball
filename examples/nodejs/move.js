@@ -90,10 +90,11 @@ async function main() {
         // Setup MESH block with initial communication
         await setupBlock(characteristics);
 
-        let power;
-        block.onTapped = () => {
-            power = block.onTapped(accele);
-            console.log(`Tapped: ${power}`);
+
+        block.onShaked = (accele) => {
+            console.log(`power: ${accele.x}`);
+            console.log(`power: ${accele.y}`);
+            console.log(`power: ${accele.z}`);
         }
     });
 }

@@ -133,8 +133,8 @@ document.addEventListener('keydown', (event) => {
 
 // 摩擦効果
 function applyFriction() {
-  velocity.x *= 0.98;
-  velocity.z *= 0.98;
+  velocity.x *= 0.96;
+  velocity.z *= 0.96;
 }
 
 // ボールがフィールドの外に出たらリセットする関数

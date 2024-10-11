@@ -95,6 +95,8 @@ async function main() {
             console.log(`power: ${accele.x}`);
             console.log(`power: ${accele.y}`);
             console.log(`power: ${accele.z}`);
+
+            return accele;
         }
     });
 }

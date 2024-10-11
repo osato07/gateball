@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gateball Scene</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+
+        }
+        #msg {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            left: 50%;
+            top: 50%;
+            color: white;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 800px;
+            height: 250px;
+            background-color: #0d1833;
+            opacity: 0;
+            transition: opacity 2s;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <audio id="goalSound" src="kansei.mp3"></audio> <!-- 音ファイル -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.2/dist/confetti.browser.min.js"></script>
+    <script src="gateball.js"></script>
+</body>
+<div id="msg">ゴールしました！</div>
+</html>

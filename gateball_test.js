@@ -1,3 +1,7 @@
+// import { x_move, z_move } from 'examples/nodejs/move.js';
+import { x_move, z_move } from 'examples/nodejs/move.js';
+
+
 // シーンの作成
 const scene = new THREE.Scene();
 
@@ -77,22 +81,64 @@ scene.add(goal);
 let velocity = { x: 0, z: 0 };
 
 // キー入力でボールを動かす
+// document.addEventListener('keydown', (event) => {
+//   if (event.key === 'ArrowUp') {
+//     velocity.z = -0.5;
+//   } else if (event.key === 'ArrowDown') {
+//     velocity.z = 0.5;
+//   } else if (event.key === 'ArrowLeft') {
+//     velocity.x = -0.5;
+//   } else if (event.key === 'ArrowRight') {
+//     velocity.x = 0.5;
+//   }
+// });
+
+// ベクトルの速度を設定する関数
+function setVelocity(vector) {
+  velocity.x = vector.x;
+  // velocity.y = vector.y; 
+  velocity.z = vector.z;
+}
+
+// キー入力でベクトルを設定する
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'ArrowUp') {
-    velocity.z = -0.5;
-  } else if (event.key === 'ArrowDown') {
-    velocity.z = 0.5;
-  } else if (event.key === 'ArrowLeft') {
-    velocity.x = -0.5;
-  } else if (event.key === 'ArrowRight') {
-    velocity.x = 0.5;
+  const key = event.key;
+  switch (key) {
+    case 'z':
+      setVelocity({ x: -1, z: 1 }); // 左上
+      break;
+    case 'x':
+      setVelocity({ x: 0, z: 1 }); // 上
+      break;
+    case 'c':
+      setVelocity({ x: 1, z: 1 }); // 右上
+      break;
+    case 'a':
+      setVelocity({ x: -1, z: 0 }); // 左
+      break;
+    case 's':
+      setVelocity({ x: 0, z: 0 }); // 停止
+      break;
+    case 'd':
+      setVelocity({ x: 1, z: 0 }); // 右
+      break;
+    case 'q':
+      setVelocity({ x: -1, z: -1 }); // 左下
+      break;
+    case 'w':
+      setVelocity({ x: 0, z: -1 }); // 下
+      break;
+    case 'e':
+      setVelocity({ x: 1, z: -1 }); // 右下
+      break;
   }
 });
 
+
 // 摩擦効果
 function applyFriction() {
-  velocity.x *= 0.98;
-  velocity.z *= 0.98;
+  velocity.x *= 0.96;
+  velocity.z *= 0.96;
 }
 
 // ボールがフィールドの外に出たらリセットする関数
@@ -156,10 +202,11 @@ function startConfetti() {
 function animate() {
   requestAnimationFrame(animate);
 
+  // ボールの速度を設定
+  setVelocity({x: x_move, z: z_move});
+
   golfBall.position.x += velocity.x;
   golfBall.position.z += velocity.z;
-
-  SetValocity(accele.x,accele.z);
 
   applyFriction();
   checkOutOfBounds(); // フィールド外チェック
